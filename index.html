@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nikitha Computers - Your Gateway to Tech Excellence</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000; /* Black background */
+            color: #ffffff; /* White text */
+            line-height: 1.6;
+            cursor: none; /* Hide default cursor to show only the glow */
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a4a4a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6a6a6a;
+        }
+        /* Styles for the slideshow */
+        .slideshow-container {
+            position: relative;
+            max-width: 800px; /* Adjust as needed */
+            margin: auto;
+            overflow: hidden; /* Hide overflowing slides */
+        }
+        .mySlides {
+            display: none; /* Hide slides by default */
+            animation: fadeIn 0.8s; /* Simple fade in animation */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        /* Mouse Glow Effect CSS */
+        .mouse-glow {
+            position: fixed;
+            width: 80px; /* Size of the glow */
+            height: 80px;
+            /* Adjust color to fit your theme, e.g., teal-400 equivalent rgba(45, 212, 191, 0.6) */
+            background: radial-gradient(circle at center, rgba(45, 212, 191, 0.6) 0%, rgba(45, 212, 191, 0) 70%); /* Teal glow */
+            border-radius: 50%;
+            transform: translate(-50%, -50%); /* Center the glow on the cursor */
+            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 9999; /* Ensure it's on top of everything */
+            filter: blur(20px); /* Soften the edges of the glow */
+            mix-blend-mode: screen; /* Blends nicely with dark backgrounds */
+            opacity: 0; /* Start hidden */
+            transition: opacity 0.3s ease-in-out, width 0.1s ease-out, height 0.1s ease-out; /* Smooth fade and size change */
+        }
+        .mouse-glow.active {
+            opacity: 1; /* Show when mouse is active */
+        }
+        .mouse-glow.clicked {
+            width: 120px;
+            height: 120px;
+            transition: width 0.1s ease-out, height 0.1s ease-out; /* Faster transition for click */
+        }
+</style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-gray-900 shadow-lg py-4 px-6 md:px-12 sticky top-0 z-50 rounded-b-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-teal-400 hover:text-teal-300 transition-colors duration-300">Nikitha Computers</a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="text-lg text-gray-300 hover:text-teal-400 transition-colors duration-300">Home</a>
+                <a href="#about" class="text-lg text-gray-300 hover:text-teal-400 transition-colors duration-300">About Us</a>
+                <a href="#courses" class="text-lg text-gray-300 hover:text-teal-400 transition-colors duration-300">Courses</a>
+                <a href="#why-us" class="text-lg text-gray-300 hover:text-teal-400 transition-colors duration-300">Why Us</a>
+                <a href="#gallery" class="text-lg text-gray-300 hover:text-teal-400 transition-colors duration-300">Gallery</a>
+                <a href="#contact" class="text-lg text-gray-300 hover:text-teal-400 transition-colors duration-300">Contact</a>
+            </nav>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-300 hover:text-teal-400 focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-gray-900 bg-opacity-95 z-40 flex flex-col items-center justify-center space-y-8">
+            <button id="close-mobile-menu" class="absolute top-6 right-6 text-gray-300 hover:text-teal-400 focus:outline-none">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <a href="#home" class="text-3xl text-gray-300 hover:text-teal-400 transition-colors duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Home</a>
+            <a href="#about" class="text-3xl text-gray-300 hover:text-teal-400 transition-colors duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">About Us</a>
+            <a href="#courses" class="text-3xl text-gray-300 hover:text-teal-400 transition-colors duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Courses</a>
+            <a href="#why-us" class="text-3xl text-gray-300 hover:text-teal-400 transition-colors duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Why Us</a>
+            <a href="#gallery" class="text-3xl text-gray-300 hover:text-teal-400 transition-colors duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Gallery</a>
+            <a href="#contact" class="text-3xl text-gray-300 hover:text-teal-400 transition-colors duration-300" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative h-screen flex items-center justify-center text-center px-4 overflow-hidden">
+            <!-- Background overlay for better text readability -->
+            <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black opacity-90"></div>
+            <!-- Placeholder Image (replace with actual image if available) -->
+           
+
+            <div class="relative z-10 max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-teal-400 leading-tight mb-6 animate-fade-in-up">
+                    Nikitha Computers
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 mb-10 animate-fade-in-up delay-200">
+                    Your Gateway to Excellence in Computer Education.
+                    <br class="hidden sm:block"> Empowering Minds for a Digital Future.
+                </p>
+                <a href="#courses" class="inline-block bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out text-lg">
+                    Explore Our Courses
+                </a>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-16 px-6 md:px-12 bg-gray-900 rounded-lg shadow-xl mx-4 my-8">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold text-teal-400 mb-8">About Nikitha Computers</h2>
+                <div class="max-w-3xl mx-auto text-lg text-gray-300 space-y-6">
+                    <p>
+                        Nikitha Computers Institute, located in Khammam, Telangana, is a leading education center dedicated to providing high-quality computer education. With a commitment to excellence and a focus on practical skills, we prepare our students for successful careers in the ever-evolving technology landscape.
+                    </p>
+                    <p>
+                        Established with the vision to bridge the gap between academic knowledge and industry demands, our institute offers a comprehensive range of courses designed to cater to both beginners and advanced learners. Our experienced faculty, state-of-the-art facilities, and student-centric approach ensure a conducive learning environment.
+                    </p>
+                    <p>
+                        We pride ourselves on our 4.4-star rating from 47 Google reviews, reflecting our dedication to student satisfaction and positive learning outcomes. Join us to unlock your potential and build a strong foundation for your digital future.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Message from Director Section -->
+        <section id="director-message" class="py-16 px-6 md:px-12 bg-black">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold text-teal-400 mb-12">A Message from Our Director</h2>
+                <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8 bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-700">
+                    <div class="flex-shrink-0">
+                        <!-- Placeholder Image for Director (replace with actual image) -->
+                        <img src="direc.jpg" alt="Director's Photo" class="w-48 h-48 rounded-full object-cover border-4 border-teal-500 shadow-md">
+                    </div>
+                    <div class="text-left md:text-lg text-gray-300 space-y-4">
+                        <p>
+                            Dear Aspiring Minds,
+                        </p>
+                        <p>
+                            Welcome to Nikitha Computers Institute, where innovation meets education. Our mission is to empower individuals with the knowledge and skills necessary to thrive in the dynamic world of technology. We believe that quality education is the cornerstone of a successful career, and we are committed to providing an unparalleled learning experience.
+                        </p>
+                        <p>
+                            Our dedicated faculty, comprehensive curriculum, and state-of-the-art facilities are all geared towards fostering a vibrant and supportive environment where you can explore your potential, gain practical expertise, and achieve your career aspirations. We look forward to welcoming you and being a part of your journey towards a brighter future.
+                        </p>
+                        <p class="font-semibold text-teal-300 mt-6">
+                            Sincerely,
+                            <br> G.Satyaraj
+                            <br> Director, Nikitha Computers Institute
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses Offered Section (Slideshow) -->
+        <section id="courses" class="py-16 px-6 md:px-12 bg-black">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold text-teal-400 mb-12">Our Popular Courses</h2>
+
+                <div class="slideshow-container">
+                    <!-- Slide 1 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Accounting</h3>
+                        <p class="text-gray-300 mb-4">Master the fundamentals of accounting, including financial statements, bookkeeping, and taxation principles.</p>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">CATIA</h3>
+                        <p class="text-gray-300 mb-4">Learn advanced CAD/CAM software for 3D design, engineering, and manufacturing processes.</p>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">DCA (Diploma in Computer Applications)</h3>
+                        <p class="text-gray-300 mb-4">A comprehensive diploma covering essential computer applications, including MS Office, internet, and basic programming concepts.</p>
+                    </div>
+                    <!-- Slide 4 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">GST (Goods and Services Tax)</h3>
+                        <p class="text-gray-300 mb-4">Understand the intricacies of GST, including compliance, filing, and practical applications for businesses.</p>
+                    </div>
+                    <!-- Slide 5 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Oracle DBA</h3>
+                        <p class="text-gray-300 mb-4">Become proficient in Oracle Database Administration, covering installation, configuration, and management.</p>
+                    </div>
+                    <!-- Slide 6 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Photoshop</h3>
+                        <p class="text-gray-300 mb-4">Master image editing and graphic design with Adobe Photoshop, from basic tools to advanced techniques.</p>
+                    </div>
+                    <!-- Slide 7 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Tally</h3>
+                        <p class="text-gray-300 mb-4">Learn Tally ERP 9 for accounting, inventory management, and payroll processing.</p>
+                    </div>
+                    <!-- Slide 8 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">C Programming</h3>
+                        <p class="text-gray-300 mb-4">Build a strong foundation in programming logic and problem-solving using the C language.</p>
+                    </div>
+                    <!-- Slide 9 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">CCNA (Cisco Certified Network Associate)</h3>
+                        <p class="text-gray-300 mb-4">Gain expertise in networking fundamentals, routing, switching, and network security.</p>
+                    </div>
+                    <!-- Slide 10 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Dot NET</h3>
+                        <p class="text-gray-300 mb-4">Develop applications using Microsoft .NET framework, C#, and ASP.NET.</p>
+                    </div>
+                    <!-- Slide 11 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Java</h3>
+                        <p class="text-gray-300 mb-4">Learn core Java programming, object-oriented concepts, and application development.</p>
+                    </div>
+                    <!-- Slide 12 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Oracle SQL</h3>
+                        <p class="text-gray-300 mb-4">Master SQL queries, database design, and data manipulation using Oracle SQL.</p>
+                    </div>
+                    <!-- Slide 13 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Python</h3>
+                        <p class="text-gray-300 mb-4">Explore Python programming for various applications, including web development, data analysis, and automation.</p>
+                    </div>
+                    <!-- Slide 14 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Tally GST</h3>
+                        <p class="text-gray-300 mb-4">Specialized course on Tally for Goods and Services Tax compliance and reporting.</p>
+                    </div>
+                    <!-- Slide 15 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">C++ Programming</h3>
+                        <p class="text-gray-300 mb-4">Advanced programming concepts, object-oriented programming, and data structures using C++.</p>
+                    </div>
+                    <!-- Slide 16 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Data Entry</h3>
+                        <p class="text-gray-300 mb-4">Develop accurate and efficient data entry skills for various business applications.</p>
+                    </div>
+                    <!-- Slide 17 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Graphics</h3>
+                        <p class="text-gray-300 mb-4">Introduction to graphic design principles and tools for creating visual content.</p>
+                    </div>
+                    <!-- Slide 18 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">Multimedia</h3>
+                        <p class="text-gray-300 mb-4">Explore multimedia creation, including audio, video, and animation techniques.</p>
+                    </div>
+                    <!-- Slide 19 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4">PG Diploma in Human Resource Management</h3>
+                        <p class="text-gray-300 mb-4">A postgraduate diploma focusing on HR principles, practices, and strategic management.</p>
+                    </div>
+                    <!-- Slide 20 -->
+                    <div class="mySlides bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                        <h3 class="2xl font-semibold text-teal-300 mb-4">SAP</h3>
+                        <p class="text-gray-300 mb-4">Learn SAP modules for enterprise resource planning and business process management.</p>
+                    </div>
+
+                    <!-- Next and previous buttons -->
+                    
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us Section -->
+        <section id="why-us" class="py-16 px-6 md:px-12 bg-gray-900 rounded-lg shadow-xl mx-4 my-8">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold text-teal-400 mb-12">Why Choose Nikitha Computers?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
+                        <div class="text-teal-400 mb-4">
+                            <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H2m2-2v-1a3 3 0 013-3h2.153a3 3 0 012.87 2.028M17 20h2a3 3 0 003-3V9a2 2 0 00-2-2h-2M3 8a2 2 0 012-2h3.153a3 3 0 012.87 2.028M3 8V6a2 2 0 012-2h2.153a3 3 0 012.87 2.028m0 0A3 3 0 0115 9.153V17m0 0h2.87A3 3 0 0022 14.847M17 14V9.153a3 3 0 00-2.87-2.028m0 0H7m0 0V6a2 2 0 00-2-2H3m0 0v14"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-teal-300 mb-2">Experienced Faculty</h3>
+                        <p class="text-gray-400">Learn from industry experts with years of teaching and professional experience.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
+                        <div class="text-teal-400 mb-4">
+                            <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 7V5a2 2 0 012-2h10a2 2 0 012 2v2M5 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2h-1m-6 4v4m0 0h-4m4 0h4"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-teal-300 mb-2">Practical Training</h3>
+                        <p class="text-gray-400">Hands-on projects and real-world case studies for effective skill development.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
+                        <div class="text-teal-400 mb-4">
+                            <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.55 23.55 0 0112 15c-1.485 0-2.94-.06-4.37-.175m.003 0c-.789 0-1.571-.05-2.349-.145L2 13.255M21 13.255V17a2 2 0 01-2 2H5a2 2 0 01-2-2v-3.745L2 13.255m0 0L2.25 5.5M21 13.255L21.75 5.5M2.25 5.5h19.5M2.25 5.5a2 2 0 00-2 2v2.145m21.5 0a2 2 0 00-2-2V7.5M12 7a4 4 0 110 8 4 4 0 010-8z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-teal-300 mb-2">Modern Facilities</h3>
+                        <p class="text-gray-400">Access to well-equipped labs and modern learning resources.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
+                        <div class="text-teal-400 mb-4">
+                            <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-teal-300 mb-2">Flexible Timings</h3>
+                        <p class="text-gray-400">Choose from various batch timings to suit your schedule.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
+                        <div class="text-teal-400 mb-4">
+                            <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3-.895-3-2 1.343-2 3-2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18V6"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-teal-300 mb-2">Career Guidance</h3>
+                        <p class="text-gray-400">Receive expert guidance for career planning and job placement assistance.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
+                        <div class="text-teal-400 mb-4">
+                            <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-teal-300 mb-2">Certified Programs</h3>
+                        <p class="text-gray-400">Our courses are designed to provide industry-recognized certifications.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-16 px-6 md:px-12 bg-black">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold text-teal-400 mb-12">Our Campus & Events Gallery</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Gallery Item 1 -->
+                    <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 border border-gray-700">
+                        <img src="classsroom.jpg" alt="Classroom View" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-gray-800">
+                            <p class="text-lg text-gray-300">Modern Classrooms</p>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 2 -->
+                    <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 border border-gray-700">
+                        <img src="labs.jpg" alt="Computer Lab" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-gray-800">
+                            <p class="text-lg text-gray-300">State-of-the-Art Lab</p>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 3 -->
+                    <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 border border-gray-700">
+                        <img src="interacyion.jpg" alt="Student Interaction" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-gray-800">
+                            <p class="text-lg text-gray-300">Engaging Sessions</p>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 4 -->
+                    <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 border border-gray-700">
+                        <img src="handson experience.jpg" alt="Workshop Event" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-gray-800">
+                            <p class="text-lg text-gray-300">Hands-on Workshops</p>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 5 -->
+                    <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 border border-gray-700">
+                        <img src="Success.jpg" alt="Graduation Ceremony" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-gray-800">
+                            <p class="text-lg text-gray-300">Success Stories</p>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 6 -->
+                    <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 border border-gray-700">
+                        <img src="WhatsApp Image 2025-07-27 at 18.38.45_7cdbb747.jpg" alt="Student Projects" class="w-full h-48 object-cover">
+                        <div class="p-4 bg-gray-800">
+                            <p class="text-lg text-gray-300">Innovative Projects</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Us Section -->
+        <section id="contact" class="py-16 px-6 md:px-12 bg-black">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl font-bold text-teal-400 mb-12">Get in Touch</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <!-- Contact Information -->
+                    <div class="bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-700 text-left">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-6">Contact Details</h3>
+                        <div class="space-y-6 text-gray-300">
+                            <p class="flex items-start">
+                                <span class="text-teal-400 mr-3 mt-1">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </span>
+                                <strong>Address:</strong> H.No:11-3-103/A, Opp:Bhadradri Bank, Wyra Rd, Nehru Nagar, Khammam, Telangana 507001
+                            </p>
+                            <p class="flex items-center">
+                                <span class="text-teal-400 mr-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684L10.5 9.25a1 1 0 01-1.054 1.34L8.25 10.5a11.002 11.002 0 006 6l.25-.25a1 1 0 011.34-1.054l3.566 1.778a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C7.82 21 3 16.18 3 10V5z"></path></svg>
+                                </span>
+                                <strong>Phone:</strong> <a href="tel:+919440640196" class="hover:underline">094406 40196</a>
+                            </p>
+                            <p class="flex items-center">
+                                <span class="text-teal-400 mr-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </span>
+                                <strong>Hours:</strong>  MON - SAT (Opens 9:30 AM) 
+                            </p>
+                            <p class="flex items-center">
+                                <span class="text-teal-400 mr-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-1 10a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h12a2 2 0 012 2v12z"></path></svg>
+                                </span>
+                                <strong>Email:</strong> <a href="mailto:info@nikithacomputers.com" class="hover:underline">info@nikithacomputers.com</a> (placeholder)
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Google Maps Embed (Placeholder) -->
+                    <div class="bg-gray-900 p-4 rounded-xl shadow-lg border border-gray-700 overflow-hidden">
+                        <h3 class="text-2xl font-semibold text-teal-300 mb-4 text-center">Find Us on Map</h3>
+                        <div class="h-64 md:h-96 w-full rounded-lg overflow-hidden">
+                            <!-- Replace with actual Google Maps embed iframe -->
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3850.0660267508615!2d80.14477247520728!3d17.24910148361468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a3459cdf4048707%3A0xddfd2e3df30d4b60!2sNikitha%20computers!5e1!3m2!1sen!2sin!4v1753755851664!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 py-8 px-6 md:px-12 mt-12 rounded-t-lg shadow-lg">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>&copy; 2025 Nikitha Computers Institute. All rights reserved.</p>
+            <p class="mt-2">Designed by Dokuparthy Kundan</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="#" class="text-gray-400 hover:text-teal-400 transition-colors duration-300">Privacy Policy</a>
+                <a href="#" class="text-gray-400 hover:text-teal-400 transition-colors duration-300">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+      // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+        });
+
+        closeMobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Slideshow functionality
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slides[slideIndex-1].style.display = "block";
+        }
+
+        // Optional: Auto-advance slides
+        let autoSlideInterval = setInterval(() => {
+            plusSlides(1);
+         }, 5000);
+
+        // Mouse Glow Effect JavaScript - ADDED HERE
+        document.addEventListener('DOMContentLoaded', () => {
+            const glow = document.createElement('div');
+            glow.classList.add('mouse-glow');
+            document.body.appendChild(glow);
+
+            let isMouseActive = false;
+            let timeoutId;
+
+            document.addEventListener('mousemove', (e) => {
+                glow.style.left = `${e.clientX}px`;
+                glow.style.top = `${e.clientY}px`;
+
+                if (!isMouseActive) {
+                    glow.classList.add('active');
+                    isMouseActive = true;
+                }
+
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    glow.classList.remove('active');
+                    isMouseActive = false;
+                }, 1000); // Glow fades out after 1 second of no mouse movement
+            });
+
+            // Handle mouse leaving the document to hide the glow
+            document.addEventListener('mouseleave', () => {
+                clearTimeout(timeoutId);
+                glow.classList.remove('active');
+                isMouseActive = false;
+            });
+
+            // Add a subtle effect on click
+            document.addEventListener('mousedown', () => {
+                glow.classList.add('clicked');
+            });
+
+            document.addEventListener('mouseup', () => {
+                glow.classList.remove('clicked');
+            });
+        }); // Change slide every 5 seconds
+
+        // To pause auto-advance on hover (if enabled)
+        // const slideshowContainer = document.querySelector('.slideshow-container');
+        // slideshowContainer.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+        // slideshowContainer.addEventListener('mouseleave', () => {
+        //     autoSlideInterval = setInterval(() => {
+        //         plusSlides(1);
+        //     }, 5000);
+        // });
+    </script>
+</body>
+</html>
